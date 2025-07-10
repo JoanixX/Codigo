@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './AuthPage.module.css';
 import { authService } from '../services/authService';
 
@@ -16,12 +16,29 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialForm = 'login', onAuthSucces
     correo_electronico: '',
     contraseña: '',
     confirmPassword: '',
-    nombre: '',
-    apellido: '',
-    telefono: '',
-    direccion: '',
     rol: 'cliente' as 'cliente' | 'administrador'
   });
+
+  // Escuchar cambios en la URL para actualizar el formulario
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'login') {
+        setIsLogin(true);
+        setError('');
+      } else if (hash === 'register') {
+        setIsLogin(false);
+        setError('');
+      }
+    };
+
+    // Verificar el hash actual al montar el componente
+    handleHashChange();
+
+    // Escuchar cambios en el hash
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -31,10 +48,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialForm = 'login', onAuthSucces
       correo_electronico: '',
       contraseña: '',
       confirmPassword: '',
-      nombre: '',
-      apellido: '',
-      telefono: '',
-      direccion: '',
       rol: 'cliente' as 'cliente' | 'administrador'
     });
   };
@@ -51,14 +64,17 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialForm = 'login', onAuthSucces
 
   const validateForm = (): boolean => {
     if (isLogin) {
-      if (!formData.usuario || !formData.contraseña) {
-        setError('Por favor completa todos los campos');
+      if (!formData.usuario && !formData.correo_electronico) {
+        setError('Por favor ingresa tu nombre de usuario o correo electrónico');
+        return false;
+      }
+      if (!formData.contraseña) {
+        setError('Por favor ingresa tu contraseña');
         return false;
       }
     } else {
       // Validaciones para registro
-      if (!formData.usuario || !formData.correo_electronico || !formData.contraseña || 
-          !formData.nombre || !formData.apellido || !formData.telefono || !formData.direccion) {
+      if (!formData.usuario || !formData.correo_electronico || !formData.contraseña) {
         setError('Por favor completa todos los campos');
         return false;
       }
@@ -122,10 +138,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialForm = 'login', onAuthSucces
           usuario: formData.usuario,
           correo_electronico: formData.correo_electronico,
           contraseña: formData.contraseña,
-          nombre: formData.nombre,
-          apellido: formData.apellido,
-          telefono: formData.telefono,
-          direccion: formData.direccion,
           rol: formData.rol
         });
         
@@ -134,6 +146,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialForm = 'login', onAuthSucces
         }
       }
     } catch (error: any) {
+      console.error('Error en autenticación:', error);
       setError(error.message || 'Error en la autenticación');
     } finally {
       setIsLoading(false);
@@ -167,48 +180,12 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialForm = 'login', onAuthSucces
                 />
               </div>
               <div className={styles.formGroup}>
-                <label htmlFor="nombre">Nombre</label>
+                <label htmlFor="correo_electronico">Correo electrónico</label>
                 <input 
-                  type="text" 
-                  id="nombre" 
-                  name="nombre" 
-                  value={formData.nombre}
-                  onChange={handleInputChange}
-                  required 
-                  disabled={isLoading}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="apellido">Apellido</label>
-                <input 
-                  type="text" 
-                  id="apellido" 
-                  name="apellido" 
-                  value={formData.apellido}
-                  onChange={handleInputChange}
-                  required 
-                  disabled={isLoading}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="telefono">Teléfono</label>
-                <input 
-                  type="tel" 
-                  id="telefono" 
-                  name="telefono" 
-                  value={formData.telefono}
-                  onChange={handleInputChange}
-                  required 
-                  disabled={isLoading}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="direccion">Dirección</label>
-                <input 
-                  type="text" 
-                  id="direccion" 
-                  name="direccion" 
-                  value={formData.direccion}
+                  type="email" 
+                  id="correo_electronico" 
+                  name="correo_electronico" 
+                  value={formData.correo_electronico}
                   onChange={handleInputChange}
                   required 
                   disabled={isLoading}
@@ -233,31 +210,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialForm = 'login', onAuthSucces
           
           {isLogin && (
             <div className={styles.formGroup}>
-              <label htmlFor="usuario">Nombre de usuario</label>
+              <label htmlFor="usuario">Nombre de usuario o correo electrónico</label>
               <input 
                 type="text" 
                 id="usuario" 
                 name="usuario" 
                 value={formData.usuario}
                 onChange={handleInputChange}
+                placeholder="Usuario o correo electrónico"
                 required 
                 disabled={isLoading}
               />
             </div>
           )}
           
-          <div className={styles.formGroup}>
-            <label htmlFor="correo_electronico">Correo electrónico</label>
-            <input 
-              type="email" 
-              id="correo_electronico" 
-              name="correo_electronico" 
-              value={formData.correo_electronico}
-              onChange={handleInputChange}
-              required 
-              disabled={isLoading}
-            />
-          </div>
           <div className={styles.formGroup}>
             <label htmlFor="contraseña">Contraseña</label>
             <input 

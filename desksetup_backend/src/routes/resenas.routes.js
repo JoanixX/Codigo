@@ -140,9 +140,13 @@ router.post('/:id/like', async (req, res) => {
 // Obtener respuestas de una reseña
 router.get('/:id/respuestas', async (req, res) => {
   try {
-    // Por ahora retornamos un array vacío ya que no tenemos un modelo de respuestas
-    // En una implementación real, tendrías un modelo RespuestaResena
-    res.json([]);
+    const resena = await Resena.findById(req.params.id);
+    if (!resena) {
+      return res.status(404).json({ error: 'Reseña no encontrada' });
+    }
+    
+    // Devolver las respuestas de la reseña
+    res.json(resena.respuestas || []);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -151,7 +155,7 @@ router.get('/:id/respuestas', async (req, res) => {
 // Agregar respuesta a una reseña
 router.post('/:id/respuestas', async (req, res) => {
   try {
-    const { comentario } = req.body;
+    const { comentario, cliente_id } = req.body;
     
     // Verificar que la reseña existe
     const resena = await Resena.findById(req.params.id);
@@ -159,15 +163,20 @@ router.post('/:id/respuestas', async (req, res) => {
       return res.status(404).json({ error: 'Reseña no encontrada' });
     }
     
-    // Crear nueva respuesta (simulado)
+    // Crear nueva respuesta
     const nuevaRespuesta = {
-      _id: `resp${Date.now()}`,
-      review_id: req.params.id,
-      cliente_id: 'cliente789', // En una app real, esto vendría del token de autenticación
+      cliente_id: cliente_id || 'cliente789', // Usar el cliente_id proporcionado o uno por defecto
       comentario,
       fecha_respuesta: new Date().toISOString(),
       likes: 0
     };
+    
+    // Agregar la respuesta a la reseña
+    if (!resena.respuestas) {
+      resena.respuestas = [];
+    }
+    resena.respuestas.push(nuevaRespuesta);
+    await resena.save();
     
     res.status(201).json(nuevaRespuesta);
   } catch (err) {
@@ -210,6 +219,52 @@ router.get('/', async (req, res) => {
   try {
     const resenas = await Resena.find().sort({ fecha_resena: -1 });
     res.json(resenas);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Obtener todas las reseñas con detalles
+router.get('/with-details', async (req, res) => {
+  try {
+    const resenas = await Resena.find().sort({ fecha_resena: -1 });
+    
+    // Obtener detalles de productos y clientes para cada reseña
+    const resenasConDetalles = await Promise.all(
+      resenas.map(async (resena) => {
+        try {
+          const [producto, cliente] = await Promise.all([
+            require('../models/productoModel').findById(resena.producto_id),
+            require('../models/clienteModel').findById(resena.cliente_id).select('-contraseña')
+          ]);
+          
+          return {
+            ...resena.toObject(),
+            producto: producto ? {
+              _id: producto._id,
+              nombre: producto.nombre,
+              imagen_url: producto.imagen_url,
+              precio_unitario: producto.precio_unitario
+            } : null,
+            cliente: cliente ? {
+              _id: cliente._id,
+              nombre: cliente.nombre,
+              apellido: cliente.apellido,
+              usuario: cliente.usuario
+            } : null
+          };
+        } catch (error) {
+          console.error('Error al obtener detalles de reseña:', error);
+          return {
+            ...resena.toObject(),
+            producto: null,
+            cliente: null
+          };
+        }
+      })
+    );
+    
+    res.json(resenasConDetalles);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

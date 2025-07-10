@@ -1,23 +1,33 @@
 version: '3.8'
+
 services:
   frontend:
     build:
       context: ../desksetup_frontend
+      dockerfile: Dockerfile
+    container_name: desksetup_frontend
+    restart: unless-stopped
     ports:
       - "5173:80"
     depends_on:
       - backend
+    networks:
+      - desksetup_network
 
   backend:
     build:
       context: ../desksetup_backend
+      dockerfile: Dockerfile
+    container_name: desksetup_backend
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
       - MONGO_URL=mongodb://mongo:27017/desksetuppro-db
     depends_on:
       - mongo
-
+    networks:
+      - desksetup_network
 
   mongo:
     image: mongo
@@ -27,6 +37,13 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - desksetup_network
 
 volumes:
   mongo-data:
+
+networks:
+  desksetup_network:
+    driver: bridge

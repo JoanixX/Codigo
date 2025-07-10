@@ -11,15 +11,32 @@ const ProductFavorites: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const saved = localStorage.getItem(FAVORITES_KEY);
-    if (saved) {
-      const favoriteIds = JSON.parse(saved);
-      setFavorites(favoriteIds);
-      loadFavoriteProducts(favoriteIds);
-    } else {
+    loadFavoritesFromStorage();
+  }, []);
+
+  const loadFavoritesFromStorage = () => {
+    try {
+      const saved = localStorage.getItem(FAVORITES_KEY);
+      if (saved) {
+        const favoriteIds = JSON.parse(saved);
+        setFavorites(favoriteIds);
+        loadFavoriteProducts(favoriteIds);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Error loading favorites from storage:', error);
       setLoading(false);
     }
-  }, []);
+  };
+
+  const saveFavoritesToStorage = (favoriteIds: string[]) => {
+    try {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favoriteIds));
+    } catch (error) {
+      console.error('Error saving favorites to storage:', error);
+    }
+  };
 
   const loadFavoriteProducts = async (favoriteIds: string[]) => {
     try {
@@ -37,17 +54,22 @@ const ProductFavorites: React.FC = () => {
     const updated = favorites.filter(favId => favId !== id);
     setFavorites(updated);
     setFavoriteProducts(prev => prev.filter(product => product._id !== id));
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
+    saveFavoritesToStorage(updated);
   };
 
   const addToCart = (product: Product) => {
-    const cart = JSON.parse(localStorage.getItem('product_cart') || '[]');
-    if (!cart.includes(product._id)) {
-      cart.push(product._id);
-      localStorage.setItem('product_cart', JSON.stringify(cart));
-      alert('Producto agregado al carrito');
-    } else {
-      alert('Producto ya está en el carrito');
+    try {
+      const cart = JSON.parse(localStorage.getItem('product_cart') || '[]');
+      if (!cart.includes(product._id)) {
+        cart.push(product._id);
+        localStorage.setItem('product_cart', JSON.stringify(cart));
+        alert('Producto agregado al carrito');
+      } else {
+        alert('Producto ya está en el carrito');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Error al agregar al carrito');
     }
   };
 

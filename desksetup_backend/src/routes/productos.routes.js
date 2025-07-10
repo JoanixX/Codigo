@@ -1,59 +1,19 @@
 const express = require('express');
-const router = express.Router();
 const Producto = require('../models/productoModel');
+const Cliente = require('../models/clienteModel');
+const router = express.Router();
 
 // Obtener todos los productos
 router.get('/', async (req, res) => {
   try {
-    const { categoria, busqueda, ordenar, pagina = 1, limite = 20 } = req.query;
-    
-    let filtro = {};
-    
-    // Filtro por categoría
-    if (categoria) {
-      filtro.categoria_id = categoria;
-    }
-    
-    // Búsqueda por nombre o descripción
-    if (busqueda) {
-      filtro.$or = [
-        { nombre: { $regex: busqueda, $options: 'i' } },
-        { descripcion: { $regex: busqueda, $options: 'i' } }
-      ];
-    }
-    
-    // Ordenamiento
-    let orden = {};
-    if (ordenar === 'precio_asc') orden.precio_unitario = 1;
-    else if (ordenar === 'precio_desc') orden.precio_unitario = -1;
-    else if (ordenar === 'nombre_asc') orden.nombre = 1;
-    else if (ordenar === 'nombre_desc') orden.nombre = -1;
-    else orden._id = 1; // Por defecto, ordenar por ID
-    
-    const skip = (pagina - 1) * limite;
-    
-    const productos = await Producto.find(filtro)
-      .sort(orden)
-      .skip(skip)
-      .limit(parseInt(limite));
-    
-    const total = await Producto.countDocuments(filtro);
-    
-    res.json({
-      productos,
-      paginacion: {
-        pagina: parseInt(pagina),
-        limite: parseInt(limite),
-        total,
-        paginas: Math.ceil(total / limite)
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const productos = await Producto.find();
+    res.json(productos);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener productos' });
   }
 });
 
-// Obtener producto por ID
+// Obtener un producto por ID
 router.get('/:id', async (req, res) => {
   try {
     const producto = await Producto.findById(req.params.id);
@@ -61,37 +21,58 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
     res.json(producto);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener producto' });
   }
 });
 
-// Crear producto
+// Crear nuevo producto
 router.post('/', async (req, res) => {
   try {
-    const producto = new Producto({
+    const { nombre, descripcion, precio, categoria, imagen, stock } = req.body;
+
+    if (!nombre || !descripcion || !precio || !categoria || !imagen) {
+      return res.status(400).json({ error: 'Todos los campos son requeridos' });
+    }
+
+    const nuevoProducto = new Producto({
       _id: Date.now().toString(),
-      ...req.body
+      nombre,
+      descripcion,
+      precio: Number(precio),
+      categoria,
+      imagen,
+      stock: Number(stock) || 10
     });
-    await producto.save();
-    res.status(201).json(producto);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+
+    await nuevoProducto.save();
+    res.status(201).json(nuevoProducto);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al crear producto' });
   }
 });
 
 // Actualizar producto
 router.put('/:id', async (req, res) => {
   try {
-    const producto = await Producto.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
-      { new: true, runValidators: true }
-    );
-    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
+    const producto = await Producto.findById(req.params.id);
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+
+    const { nombre, descripcion, precio, categoria, imagen, stock } = req.body;
+
+    if (nombre) producto.nombre = nombre;
+    if (descripcion) producto.descripcion = descripcion;
+    if (precio !== undefined) producto.precio = Number(precio);
+    if (categoria) producto.categoria = categoria;
+    if (imagen) producto.imagen = imagen;
+    if (stock !== undefined) producto.stock = Number(stock);
+
+    await producto.save();
     res.json(producto);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar producto' });
   }
 });
 
@@ -99,59 +80,97 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const producto = await Producto.findByIdAndDelete(req.params.id);
-    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
-    res.json({ message: 'Producto eliminado' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Gestionar stock
-router.patch('/:id/stock', async (req, res) => {
-  try {
-    const { cantidad, operacion } = req.body; // operacion: 'sumar' o 'restar'
-    
-    const producto = await Producto.findById(req.params.id);
-    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
-    
-    if (operacion === 'sumar') {
-      producto.stock += parseInt(cantidad);
-    } else if (operacion === 'restar') {
-      producto.stock = Math.max(0, producto.stock - parseInt(cantidad));
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
     }
-    
-    await producto.save();
-    res.json(producto);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.json({ message: 'Producto eliminado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar producto' });
   }
 });
 
-// Obtener productos por categoría
-router.get('/categoria/:categoriaId', async (req, res) => {
+// Comprar productos (actualizar stock y wallet)
+router.post('/comprar', async (req, res) => {
   try {
-    const productos = await Producto.find({
-      categoria_id: req.params.categoriaId
-    });
-    res.json(productos);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+    const { clienteId, productos } = req.body;
 
-// Buscar productos
-router.get('/buscar/:termino', async (req, res) => {
-  try {
-    const { termino } = req.params;
-    const productos = await Producto.find({
-      $or: [
-        { nombre: { $regex: termino, $options: 'i' } },
-        { descripcion: { $regex: termino, $options: 'i' } }
-      ]
+    if (!clienteId || !productos || !Array.isArray(productos)) {
+      return res.status(400).json({ error: 'Datos de compra inválidos' });
+    }
+
+    // Obtener cliente
+    const cliente = await Cliente.findById(clienteId);
+    if (!cliente) {
+      return res.status(404).json({ error: 'Cliente no encontrado' });
+    }
+
+    let totalCompra = 0;
+    const productosActualizados = [];
+
+    // Verificar stock y calcular total
+    for (const item of productos) {
+      const producto = await Producto.findById(item.producto_id);
+      if (!producto) {
+        return res.status(404).json({ error: `Producto ${item.producto_id} no encontrado` });
+      }
+
+      if (producto.stock < item.cantidad) {
+        return res.status(400).json({ 
+          error: `Stock insuficiente para ${producto.nombre}. Disponible: ${producto.stock}` 
+        });
+      }
+
+      totalCompra += producto.precio * item.cantidad;
+      productosActualizados.push({ producto, cantidad: item.cantidad });
+    }
+
+    // Verificar saldo suficiente
+    if (cliente.wallet < totalCompra) {
+      return res.status(400).json({ 
+        error: 'Saldo insuficiente en wallet' 
+      });
+    }
+
+    // Actualizar stock de productos
+    for (const { producto, cantidad } of productosActualizados) {
+      producto.stock -= cantidad;
+      await producto.save();
+    }
+
+    // Descontar del wallet del cliente
+    cliente.wallet -= totalCompra;
+
+    // Agregar transacción al historial del cliente
+    const nuevaTransaccion = {
+      id: Date.now().toString(),
+      tipo: 'compra',
+      monto: totalCompra,
+      descripcion: `Compra de ${productos.length} producto(s)`,
+      fecha: new Date().toISOString()
+    };
+
+    if (!cliente.historial) {
+      cliente.historial = [];
+    }
+    cliente.historial.unshift(nuevaTransaccion);
+
+    await cliente.save();
+
+    res.json({
+      success: true,
+      message: 'Compra realizada exitosamente',
+      totalCompra,
+      saldoRestante: cliente.wallet,
+      productosComprados: productosActualizados.map(({ producto, cantidad }) => ({
+        nombre: producto.nombre,
+        cantidad,
+        precio: producto.precio
+      }))
     });
-    res.json(productos);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+
+  } catch (error) {
+    console.error('Error en compra:', error);
+    res.status(500).json({ error: 'Error al procesar compra' });
   }
 });
 

@@ -9,10 +9,6 @@ export interface RegisterData {
   usuario: string;
   correo_electronico: string;
   contraseña: string;
-  nombre: string;
-  apellido: string;
-  telefono: string;
-  direccion: string;
   rol: 'cliente' | 'administrador';
 }
 
@@ -32,10 +28,17 @@ export interface AuthResponse {
 class AuthService {
   async login(loginData: LoginData): Promise<AuthResponse> {
     try {
+      // Determinar si el usuario ingresó un correo electrónico o nombre de usuario
+      const isEmail = loginData.usuario.includes('@');
+      
       const response = await fetch(`${API_BASE_URL}/clientes/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify({
+          usuario: isEmail ? '' : loginData.usuario,
+          correo_electronico: isEmail ? loginData.usuario : '',
+          contraseña: loginData.contraseña
+        }),
       });
       
       const data = await response.json();

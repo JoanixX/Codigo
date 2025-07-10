@@ -39,12 +39,13 @@ const clienteSchema = new mongoose.Schema({
   usuario: { type: String, required: true, unique: true },
   correo_electronico: { type: String, required: true, unique: true },
   contraseña: { type: String, required: true },
-  nombre: { type: String },
-  apellido: { type: String },
-  telefono: { type: String },
-  direccion: { type: String },
+  nombre: { type: String, default: '' },
+  apellido: { type: String, default: '' },
+  telefono: { type: String, default: '' },
+  direccion: { type: String, default: '' },
   fecha_registro: { type: Date, default: Date.now },
   rol: { type: String, enum: ['cliente', 'administrador'], default: 'cliente' },
+  wallet: { type: Number, default: 100 }, // Saldo inicial de 100
   carrito: { type: carritoSchema },
   pedidos: { type: [pedidoSchema] },
   favoritos: [{ type: String }] // IDs de productos favoritos

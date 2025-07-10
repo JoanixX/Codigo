@@ -16,6 +16,7 @@ import './components/animations/cyberpunkBetterAnimations.css';
 import AuthPage from './components/AuthPage';
 import AdminForms from './components/AdminForms';
 import ReviewForm from './components/ReviewForm';
+import ProfilePage from './components/ProfilePage';
 import { authService } from './services/authService';
 
 function App() {
@@ -25,42 +26,16 @@ function App() {
   const [sectionsFadein, setSectionsFadein] = useState(false); // Nuevo estado para animar fadein
   const sectionsRef = useRef<HTMLDivElement>(null);
 
-  // Estado de autenticación
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Verificar autenticación al cargar la aplicación
-  React.useEffect(() => {
-    const checkAuth = () => {
-      const authenticated = authService.isAuthenticated();
-      setIsLoggedIn(authenticated);
-    };
-    
-    checkAuth();
-    
-    // Escuchar cambios en localStorage para actualizar el estado
-    const handleStorageChange = () => {
-      checkAuth();
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
   // Función para manejar login exitoso
   const handleAuthSuccess = () => {
-    setIsLoggedIn(true);
     setPage('inicio'); // Redirigir al inicio después del login
   };
 
   // Función para manejar logout
   const handleLogout = () => {
     authService.logout();
-    setIsLoggedIn(false);
     setPage('inicio');
   };
-
-  // Obtener información del usuario actual
-  const currentUser = authService.getUser();
 
   const PAGES = {
     inicio: 'Inicio',
@@ -74,6 +49,7 @@ function App() {
     review: <ReviewForm productoId="1" productoNombre="Producto Ejemplo" />,
     productos: <ProductList />,
     resenas: <ReviewList />,
+    profile: <ProfilePage />,
   } as const;
   type PageKey = keyof typeof PAGES;
 
@@ -136,9 +112,7 @@ function App() {
   return (
     <>
       <Navbar 
-        isLoggedIn={isLoggedIn} 
         onLogout={handleLogout} 
-        userRole={currentUser?.rol}
       />
       <div className="particle-bg">
         {Array.from({ length: 8 }).map((_, i) => (

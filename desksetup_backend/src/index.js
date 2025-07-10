@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
 const PORT = 3000;
 
 // Manejo de errores no capturados
@@ -13,6 +12,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 require('./database');
+const app = express();
 app.use(express.json());
 app.use(cors());
 

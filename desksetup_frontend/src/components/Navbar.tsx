@@ -1,63 +1,107 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Navbar.module.css';
 import { authService } from '../services/authService';
 
 interface NavbarProps {
-  isLoggedIn: boolean;
   onLogout?: () => void;
-  userRole?: 'cliente' | 'administrador';
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout, userRole }) => {
-  const currentUser = authService.getUser();
-  const userRoleFromService = currentUser?.rol || userRole;
-  const isAdmin = userRoleFromService === 'administrador';
+const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  useEffect(() => {
+    const user = authService.getUser();
+    setCurrentUser(user);
+
+    const handleStorageChange = () => {
+      const updatedUser = authService.getUser();
+      setCurrentUser(updatedUser);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  const handleLogout = () => {
+    if (window.confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+      authService.logout();
+      setCurrentUser(null);
+      if (onLogout) {
+        onLogout();
+      }
+      window.location.hash = '#login';
+    }
+  };
+
+  const handleMenuClick = (hash: string) => {
+    window.location.hash = hash;
+    setShowUserMenu(false);
+  };
 
   return (
-    <header className={styles.header}>
-      <div className={`container ${styles['header-container']}`}>
-        <a href="#" className={styles.logo}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#6C63FF" />
-              <stop offset="100%" stopColor="#3B2FFF" />
-            </linearGradient>
-            <path fill="url(#grad)" d="M12 2L22 7L12 12L2 7L12 2Z" />
-            <path fill="url(#grad)" d="M12 12L22 17L12 22L2 17L12 12Z" />
-          </svg>
-          <span className={styles['logo-text']}>DS Pro</span>
-        </a>
-        <nav className={styles.nav}>
-          {isLoggedIn ? (
+    <nav className={styles.navbar}>
+      <div className={styles.navContainer}>
+        <div className={styles.navLogo}>
+          <a href="#inicio" className={styles.logo}>
+            DeskSetup Store
+          </a>
+        </div>
+
+        <div className={styles.navLinks}>
+          <a href="#inicio" className={styles['nav-link']}>Inicio</a>
+          <a href="#productos" className={styles['nav-link']}>Productos</a>
+          <a href="#resenas" className={styles['nav-link']}>Reseñas</a>
+          
+          {currentUser ? (
             <>
-              <a href="#productos" className={styles['nav-link']}>Productos</a>
-              <a href="#carrito" className={styles['nav-link']}>Carrito</a>
-              {!isAdmin && (
-                <>
-                  <a href="#favoritos" className={styles['nav-link']}>Favoritos</a>
-                  <a href="#resenas" className={styles['nav-link']}>Reseñas</a>
-                </>
+              {currentUser.rol === 'administrador' && (
+                <a href="#admin" className={styles['nav-link']}>Admin</a>
               )}
-              <a href="#wallet" className={styles['nav-link']}>Wallet</a>
-              {onLogout && (
+              {currentUser.rol !== 'administrador' && (
+                <a href="#carrito" className={styles['nav-link']}>Carrito</a>
+              )}
+              <div className={styles.userMenu}>
                 <button 
-                  onClick={onLogout} 
-                  className={styles['nav-link']}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    cursor: 'pointer', 
-                    color: 'inherit',
-                    fontWeight: '600',
-                    fontSize: '1rem',
-                    transition: 'color 0.3s',
-                    padding: '4px 12px',
-                    borderRadius: '8px'
-                  }}
+                  className={styles.userButton}
+                  onClick={() => setShowUserMenu(!showUserMenu)}
                 >
-                  Cerrar Sesión
+                  {currentUser?.usuario || 'Usuario'}
+                  <span className={styles.dropdownArrow}>▼</span>
                 </button>
-              )}
+                
+                {showUserMenu && (
+                  <div className={styles.dropdownMenu}>
+                    {currentUser?.rol === 'administrador' && (
+                      <button 
+                        onClick={() => handleMenuClick('#admin')} 
+                        className={styles.dropdownItem}
+                      >
+                        <span className={styles.menuIcon}>⚙️</span>
+                        Panel de Administración
+                      </button>
+                    )}
+                    <button 
+                      onClick={() => handleMenuClick('#wallet')} 
+                      className={styles.dropdownItem}
+                    >
+                      <span className={styles.menuIcon}>💰</span>
+                      Wallet
+                    </button>
+                    <button 
+                      onClick={() => handleMenuClick('#profile')} 
+                      className={styles.dropdownItem}
+                    >
+                      <span className={styles.menuIcon}>👤</span>
+                      Mi Perfil
+                    </button>
+                    <button onClick={handleLogout} className={styles.dropdownItem}>
+                      <span className={styles.menuIcon}>🚪</span>
+                      Cerrar Sesión
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>
@@ -65,9 +109,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout, userRole }) => {
               <a href="#register" className={styles['nav-link']}>Registrarse</a>
             </>
           )}
-        </nav>
+        </div>
       </div>
-    </header>
+    </nav>
   );
 };
 

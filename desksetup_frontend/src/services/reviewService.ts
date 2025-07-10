@@ -52,62 +52,16 @@ class ReviewService {
   // Obtener todas las reseñas con detalles (para clientes y admins)
   async getReviewsWithDetails(): Promise<ReviewWithDetails[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/resenas`);
+      const response = await fetch(`${API_BASE_URL}/resenas/with-details`);
       if (!response.ok) {
         throw new Error('Error al obtener reseñas');
       }
       
       const reviews = await response.json();
-      
-      // Obtener detalles de productos y clientes para cada reseña
-      const reviewsWithDetails = await Promise.all(
-        reviews.map(async (review: Review) => {
-          try {
-            const [productResponse, clientResponse] = await Promise.all([
-              fetch(`${API_BASE_URL}/productos/${review.producto_id}`),
-              fetch(`${API_BASE_URL}/clientes/${review.cliente_id}`)
-            ]);
-            
-            let producto = null;
-            let cliente = null;
-            
-            if (productResponse.ok) {
-              const productData = await productResponse.json();
-              producto = {
-                _id: productData._id,
-                nombre: productData.nombre,
-                imagen_url: productData.imagen_url,
-                precio_unitario: productData.precio_unitario
-              };
-            }
-            
-            if (clientResponse.ok) {
-              const clientData = await clientResponse.json();
-              cliente = {
-                _id: clientData._id,
-                nombre: clientData.nombre,
-                apellido: clientData.apellido,
-                usuario: clientData.usuario
-              };
-            }
-            
-            return {
-              ...review,
-              producto,
-              cliente,
-              likes: review.likes || 0
-            };
-          } catch (error) {
-            console.error('Error al obtener detalles de reseña:', error);
-            return {
-              ...review,
-              likes: review.likes || 0
-            };
-          }
-        })
-      );
-      
-      return reviewsWithDetails;
+      return reviews.map((review: any) => ({
+        ...review,
+        likes: review.likes || 0
+      }));
     } catch (error) {
       console.error('Error en getReviewsWithDetails:', error);
       throw error;
@@ -150,22 +104,28 @@ class ReviewService {
 
   // Agregar respuesta a una reseña
   async addResponse(responseData: ResponseFormData): Promise<ReviewResponse> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/resenas/${responseData.review_id}/respuestas`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(responseData)
-      });
-      
-      if (!response.ok) {
-        throw new Error('Error al agregar respuesta');
-      }
-      
-      return response.json();
-    } catch (error) {
-      console.error('Error en addResponse:', error);
-      throw error;
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!currentUser._id) {
+      throw new Error('Usuario no autenticado');
     }
+
+    const responseDataWithUser = {
+      ...responseData,
+      cliente_id: currentUser._id
+    };
+
+    const response = await fetch(`${API_BASE_URL}/resenas/${responseData.review_id}/respuestas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(responseDataWithUser)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error al agregar respuesta');
+    }
+    
+    return response.json();
   }
 
   // Compartir reseña (simulado)
@@ -210,13 +170,24 @@ class ReviewService {
 
   // Crear reseña (para clientes)
   async createReview(reviewData: ReviewFormData): Promise<Review> {
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!currentUser._id) {
+      throw new Error('Usuario no autenticado');
+    }
+
+    const reviewDataWithUser = {
+      ...reviewData,
+      cliente_id: currentUser._id
+    };
+
     const response = await fetch(`${API_BASE_URL}/resenas`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(reviewData),
+      body: JSON.stringify(reviewDataWithUser),
     });
     if (!response.ok) {
-      throw new Error('Error al crear reseña');
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error al crear reseña');
     }
     return response.json();
   }

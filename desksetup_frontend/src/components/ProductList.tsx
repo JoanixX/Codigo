@@ -53,24 +53,34 @@ const ProductList: React.FC = () => {
   }, [searchTerm, products]);
 
   const handleAddToCart = (product: Product) => {
-    const cart = JSON.parse(localStorage.getItem('product_cart') || '[]');
-    if (!cart.includes(product._id)) {
-      cart.push(product._id);
-      localStorage.setItem('product_cart', JSON.stringify(cart));
-      alert('Producto agregado al carrito');
-    } else {
-      alert('Producto ya está en el carrito');
+    try {
+      const cart = JSON.parse(localStorage.getItem('product_cart') || '[]');
+      if (!cart.includes(product._id)) {
+        cart.push(product._id);
+        localStorage.setItem('product_cart', JSON.stringify(cart));
+        alert('Producto agregado al carrito');
+      } else {
+        alert('Producto ya está en el carrito');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Error al agregar al carrito');
     }
   };
 
   const handleAddToFavorites = (product: Product) => {
-    const favorites = JSON.parse(localStorage.getItem('product_favorites') || '[]');
-    if (!favorites.includes(product._id)) {
-      favorites.push(product._id);
-      localStorage.setItem('product_favorites', JSON.stringify(favorites));
-      alert('Producto agregado a favoritos');
-    } else {
-      alert('Producto ya está en favoritos');
+    try {
+      const favorites = JSON.parse(localStorage.getItem('product_favorites') || '[]');
+      if (!favorites.includes(product._id)) {
+        favorites.push(product._id);
+        localStorage.setItem('product_favorites', JSON.stringify(favorites));
+        alert('Producto agregado a favoritos');
+      } else {
+        alert('Producto ya está en favoritos');
+      }
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+      alert('Error al agregar a favoritos');
     }
   };
 
