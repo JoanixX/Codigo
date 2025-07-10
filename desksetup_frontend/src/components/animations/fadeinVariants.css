@@ -1,0 +1,25 @@
+/* Animaciones diferenciadas para imágenes y textos (fade-in, slide, blur, scale) */
+
+.fadein-img,
+.fadein-text,
+.fadein-title {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.fadein-img.js-anim,
+.fadein-text.js-anim,
+.fadein-title.js-anim {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1),
+              transform 0.7s cubic-bezier(.22,1,.36,1);
+  will-change: opacity, transform;
+}
+
+.fadein-img.js-anim.visible,
+.fadein-text.js-anim.visible,
+.fadein-title.js-anim.visible {
+  opacity: 1;
+  transform: none;
+}

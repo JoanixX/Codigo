@@ -1,0 +1,59 @@
+/* Animaciones futuristas y cyberpunk para tarjetas, listas y secciones */
+
+/* Scanline animada */
+.futuristic-scanline {
+  position: relative;
+  overflow: hidden;
+}
+.futuristic-scanline::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #00fff7 60%, transparent);
+  animation: scanline-move 2.2s linear infinite;
+  z-index: 2;
+}
+@keyframes scanline-move {
+  0% { top: 0; opacity: 0.7; }
+  50% { top: 95%; opacity: 1; }
+  100% { top: 0; opacity: 0.7; }
+}
+
+/* Aparición lateral alternada */
+.futuristic-fadein-left {
+  opacity: 0;
+  transform: translateX(-60px) scale(0.98);
+}
+.futuristic-fadein-right {
+  opacity: 0;
+  transform: translateX(60px) scale(0.98);
+}
+.futuristic-fadein.visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+/* Glow y borde animado al hacer hover */
+.futuristic-card {
+  position: relative;
+  border-radius: 16px;
+  background: rgba(20, 22, 50, 0.85);
+  box-shadow: 0 0 32px #00fff755, 0 0 8px #23244a88;
+  border: 1.5px solid #00fff7;
+  overflow: hidden;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+.futuristic-card:hover {
+  box-shadow: 0 0 64px #00fff7cc, 0 0 24px #23244aee, 0 0 8px #fff;
+  border: 2.5px solid #00fff7;
+}
+
+/* Aparición escalonada para listas */
+.futuristic-stagger {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+}
+.futuristic-stagger.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}

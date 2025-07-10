@@ -1,0 +1,398 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: transparent;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.title {
+  color: #6C63FF;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.searchContainer {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.searchInput {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #6c63ff44;
+  background: #23244a;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  min-width: 250px;
+}
+
+.addButton {
+  padding: 12px 20px;
+  background: linear-gradient(90deg, #6C63FF 0%, #8AFF00 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.loadingContainer {
+  text-align: center;
+  padding: 40px;
+  color: #6C63FF;
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 12px;
+  margin: 20px;
+  border: 2px solid #6C63FF;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingText {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.loadingSubtext {
+  font-size: 0.9rem;
+  color: #8AFF00;
+}
+
+.loadingStatus {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 30px;
+  color: #ff4a4a;
+  background: rgba(255, 74, 74, 0.1);
+  border-radius: 12px;
+  margin: 20px;
+  border: 2px solid #ff4a4a;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.errorTitle {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.errorMessage {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  max-width: 500px;
+}
+
+.retryButton {
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #6C63FF 0%, #8AFF00 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.emptyContainer {
+  text-align: center;
+  padding: 40px;
+  color: #6C63FF;
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 12px;
+  margin: 20px;
+  border: 2px solid #6C63FF;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyTitle {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.emptySubtext {
+  font-size: 0.9rem;
+  color: #8AFF00;
+}
+
+.emptyCount {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.productCard {
+  background: rgba(30, 40, 60, 0.8);
+  border-radius: 16px;
+  padding: 20px;
+  border: 2px solid #6C63FF;
+  box-shadow: 0 8px 32px rgba(108, 99, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.productCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.4);
+}
+
+.productImageContainer {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  background: #23244a;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.productInfo {
+  margin-bottom: 15px;
+}
+
+.productName {
+  color: #6C63FF;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.productBrand {
+  color: #8AFF00;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.productPrice {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.productStock {
+  color: #8AFF00;
+  font-size: 0.9rem;
+}
+
+.productActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.actionButton {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: none;
+}
+
+.buyButton {
+  background: linear-gradient(90deg, #8AFF00 0%, #6C63FF 100%);
+  color: #fff;
+}
+
+.specsButton {
+  background: rgba(108, 99, 255, 0.2);
+  color: #6C63FF;
+  border: 1px solid #6C63FF;
+}
+
+.cartButton {
+  background: rgba(138, 255, 0, 0.2);
+  color: #8AFF00;
+  border: 1px solid #8AFF00;
+}
+
+.favoritesButton {
+  background: rgba(255, 215, 0, 0.2);
+  color: #FFD700;
+  border: 1px solid #FFD700;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalContent {
+  background: rgba(30,40,60,0.95);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 2px solid #6C63FF;
+  box-shadow: 0 0 32px #6c63ff33;
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalTitle {
+  color: #8AFF00;
+  margin: 0;
+  animation: none !important;
+  transition: none !important;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #ff4a4a;
+  font-size: 24px;
+  cursor: pointer;
+  font-weight: bold;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalProductName {
+  color: #6C63FF;
+  margin-bottom: 10px;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalDescription {
+  color: #fff;
+  margin-bottom: 15px;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalField {
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalFieldLabel {
+  color: #8AFF00;
+  font-weight: bold;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalFieldValue {
+  color: #fff;
+  margin: 5px 0;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  animation: none !important;
+  transition: none !important;
+}
+
+.modalBuyButton {
+  padding: 12px 24px;
+  background: linear-gradient(90deg, #8AFF00 0%, #6C63FF 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  animation: none !important;
+  transition: background 0.3s ease !important;
+}
+
+.modalCloseButton {
+  padding: 12px 24px;
+  background: rgba(255, 74, 74, 0.2);
+  color: #ff4a4a;
+  border: 1px solid #ff4a4a;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  animation: none !important;
+  transition: background 0.3s ease !important;
+} 

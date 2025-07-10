@@ -1,0 +1,370 @@
+/* ReviewList.module.css - Estilos para la lista de reseñas con funcionalidades sociales */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #6c63ff33;
+}
+
+.title {
+  color: #8AFF00;
+  font-size: 2rem;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(138, 255, 0, 0.3);
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(90deg, #8AFF00 0%, #6C63FF 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(138, 255, 0, 0.3);
+}
+
+.addButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(138, 255, 0, 0.4);
+}
+
+.addIcon {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: #6C63FF;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #6c63ff33;
+  border-top: 4px solid #6C63FF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.errorMessage {
+  background: #ff4444;
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border: 1px solid #ff6666;
+}
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.reviewCard {
+  background: rgba(30, 40, 60, 0.8);
+  border-radius: 16px;
+  padding: 25px;
+  border: 2px solid #6c63ff33;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.reviewCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #8AFF00 0%, #6C63FF 100%);
+}
+
+.reviewCard:hover {
+  transform: translateY(-5px);
+  border-color: #6c63ff66;
+  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.2);
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #6C63FF 0%, #8AFF00 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userName {
+  color: #8AFF00;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.reviewDate {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 1.2rem;
+  color: #444;
+  transition: color 0.3s ease;
+}
+
+.star.filled {
+  color: #FFD700;
+}
+
+.productInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #6c63ff33;
+}
+
+.productImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #6c63ff33;
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.productName {
+  color: #8AFF00;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.productPrice {
+  color: #6C63FF;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.reviewContent {
+  margin-bottom: 20px;
+}
+
+.reviewContent p {
+  color: #e0e0e0;
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.reviewActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(108, 99, 255, 0.1);
+  color: #6C63FF;
+  border: 1px solid #6c63ff33;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.actionButton:hover {
+  background: rgba(108, 99, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.actionIcon {
+  font-size: 1rem;
+}
+
+.actionText {
+  font-size: 0.85rem;
+}
+
+.likeButton {
+  position: relative;
+}
+
+
+
+.likeCount {
+  background: rgba(255, 74, 74, 0.2);
+  color: #ff4a4a;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.responseButton:hover {
+  background: rgba(138, 255, 0, 0.2);
+  color: #8AFF00;
+  border-color: #8AFF00;
+}
+
+.shareButton:hover {
+  background: rgba(255, 193, 7, 0.2);
+  color: #FFC107;
+  border-color: #FFC107;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  color: #888;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.emptyState h3 {
+  color: #8AFF00;
+  margin: 0 0 10px 0;
+  font-size: 1.5rem;
+}
+
+.emptyState p {
+  margin: 0 0 25px 0;
+  font-size: 1rem;
+}
+
+.emptyAddButton {
+  padding: 15px 30px;
+  background: linear-gradient(90deg, #8AFF00 0%, #6C63FF 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.emptyAddButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(138, 255, 0, 0.4);
+}
+
+/* Animaciones */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .reviewsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .reviewCard {
+    padding: 20px;
+  }
+  
+  .reviewHeader {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .reviewActions {
+    justify-content: center;
+  }
+  
+  .actionButton {
+    flex: 1;
+    justify-content: center;
+  }
+} 

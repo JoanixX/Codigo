@@ -1,0 +1,240 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: transparent;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.title {
+  color: #6C63FF;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.searchContainer {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.searchInput {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #6c63ff44;
+  background: #23244a;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  min-width: 250px;
+}
+
+.clearButton {
+  padding: 12px 20px;
+  background: linear-gradient(90deg, #ff4a4a 0%, #ff6b6b 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.emptyContainer {
+  text-align: center;
+  padding: 40px;
+  color: #6C63FF;
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 12px;
+  margin: 20px;
+  border: 2px solid #6C63FF;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyTitle {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.emptySubtext {
+  font-size: 0.9rem;
+  color: #8AFF00;
+}
+
+.cartGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.cartCard {
+  background: rgba(30, 40, 60, 0.8);
+  border-radius: 16px;
+  padding: 20px;
+  border: 2px solid #6C63FF;
+  box-shadow: 0 8px 32px rgba(108, 99, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cartCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.4);
+}
+
+.cartImageContainer {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  background: #23244a;
+}
+
+.cartImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cartInfo {
+  margin-bottom: 15px;
+}
+
+.cartName {
+  color: #6C63FF;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.cartBrand {
+  color: #8AFF00;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.cartPrice {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.cartStock {
+  color: #8AFF00;
+  font-size: 0.9rem;
+}
+
+.cartActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cartActionButton {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: none;
+}
+
+.buyButton {
+  background: linear-gradient(90deg, #8AFF00 0%, #6C63FF 100%);
+  color: #fff;
+}
+
+.removeButton {
+  background: rgba(255, 74, 74, 0.2);
+  color: #ff4a4a;
+  border: 1px solid #ff4a4a;
+}
+
+.specsButton {
+  background: rgba(108, 99, 255, 0.2);
+  color: #6C63FF;
+  border: 1px solid #6C63FF;
+}
+
+.summaryContainer {
+  background: rgba(30, 40, 60, 0.8);
+  border-radius: 16px;
+  padding: 30px;
+  margin-top: 30px;
+  border: 2px solid #8AFF00;
+  box-shadow: 0 8px 32px rgba(138, 255, 0, 0.2);
+}
+
+.summaryTitle {
+  color: #8AFF00;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.summaryItem {
+  text-align: center;
+  padding: 15px;
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid #6C63FF;
+}
+
+.summaryLabel {
+  color: #6C63FF;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.summaryValue {
+  color: #8AFF00;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.checkoutButton {
+  width: 100%;
+  padding: 16px 32px;
+  background: linear-gradient(90deg, #8AFF00 0%, #6C63FF 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(138, 255, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.checkoutButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(138, 255, 0, 0.4);
+} 

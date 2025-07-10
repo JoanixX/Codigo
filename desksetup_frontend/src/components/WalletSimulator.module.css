@@ -1,0 +1,128 @@
+.container {
+  margin: 32px auto;
+  text-align: center;
+  padding: 20px;
+  max-width: 600px;
+}
+
+.title {
+  color: #8AFF00;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.connectedCard {
+  background: rgba(30,40,60,0.8);
+  border-radius: 16px;
+  padding: 30px;
+  border: 2px solid #8AFF00;
+  box-shadow: 0 0 32px #8aff0033;
+}
+
+.connectedStatus {
+  margin-bottom: 20px;
+}
+
+.connectedText {
+  color: #8AFF00;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.balanceContainer {
+  background: rgba(108, 99, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #6C63FF;
+}
+
+.balanceLabel {
+  color: #6C63FF;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.balanceAmount {
+  color: #8AFF00;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.connectedActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.sendButton {
+  padding: 12px 24px;
+  background: linear-gradient(90deg, #6C63FF 0%, #8AFF00 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.receiveButton {
+  padding: 12px 24px;
+  background: rgba(138, 255, 0, 0.2);
+  color: #8AFF00;
+  border: 1px solid #8AFF00;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.disconnectButton {
+  padding: 12px 24px;
+  background: rgba(255, 74, 74, 0.2);
+  color: #ff4a4a;
+  border: 1px solid #ff4a4a;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.disconnectedCard {
+  background: rgba(30,40,60,0.8);
+  border-radius: 16px;
+  padding: 30px;
+  border: 2px solid #6C63FF;
+  box-shadow: 0 0 32px #6c63ff33;
+}
+
+.disconnectedStatus {
+  margin-bottom: 20px;
+}
+
+.disconnectedText {
+  color: #6C63FF;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.description {
+  color: #fff;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+.connectButton {
+  background: linear-gradient(90deg, #6C63FF 0%, #8AFF00 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 16px 40px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 0 24px #8aff00cc;
+} 

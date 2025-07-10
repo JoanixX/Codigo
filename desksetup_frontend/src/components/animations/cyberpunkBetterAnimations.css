@@ -1,0 +1,95 @@
+/* Better futuristic text animations */
+
+/* Text slide and scale animation */
+@keyframes slideScale {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.text-slide-scale {
+  animation: slideScale 1.2s ease forwards;
+  font-family: 'Orbitron', sans-serif;
+  color: #00fff7;
+  font-weight: 700;
+  text-shadow:
+    0 0 8px #00fff7,
+    0 0 16px #00fff7;
+}
+
+/* Image container fills and image covers */
+.image-collage {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  height: 480px; /* increased height for bigger images */
+}
+
+.image-collage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow:
+    0 0 20px #00fff7cc,
+    0 0 40px #00fff7aa;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.image-collage img:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 40px #00fff7ff,
+    0 0 80px #00fff7ff;
+}
+
+/* Subtle glitch effect for text */
+@keyframes glitch {
+  0% {
+    text-shadow:
+      2px 0 #00fff7,
+      -2px 0 #6c63ff;
+  }
+  20% {
+    text-shadow:
+      -2px 0 #00fff7,
+      2px 0 #6c63ff;
+  }
+  40% {
+    text-shadow:
+      2px 0 #00fff7,
+      -2px 0 #6c63ff;
+  }
+  60% {
+    text-shadow:
+      -2px 0 #00fff7,
+      2px 0 #6c63ff;
+  }
+  80% {
+    text-shadow:
+      2px 0 #00fff7,
+      -2px 0 #6c63ff;
+  }
+  100% {
+    text-shadow:
+      -2px 0 #00fff7,
+      2px 0 #6c63ff;
+  }
+}
+
+.text-glitch {
+  animation: glitch 2s infinite;
+  font-family: 'Orbitron', sans-serif;
+  color: #00fff7;
+  font-weight: 700;
+}

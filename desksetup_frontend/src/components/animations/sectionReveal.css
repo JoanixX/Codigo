@@ -1,0 +1,38 @@
+/*
+Animaciones cyberpunk inspiradas en efectos de Rockstar Games
+- Glow cian neón
+- Desenfoque y desplazamiento suave
+- Bordes animados al hacer hover
+*/
+
+.section-animate {
+  opacity: 0;
+  transform: translateY(80px) scale(0.96) skewY(2deg) rotate(-2deg);
+  transition:
+    opacity 1.1s cubic-bezier(.22,1,.36,1),
+    transform 1.1s cubic-bezier(.22,1,.36,1);
+  will-change: opacity, transform;
+  border-radius: 18px;
+}
+
+.section-animate.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1) skewY(0deg) rotate(0deg);
+}
+
+.section-animate:hover {
+  border: 1.5px solid #00fff7;
+  transition: border 0.3s;
+}
+
+/*
+Uso:
+- Agrega la clase 'section-animate' a la sección.
+- Cuando la sección entra en viewport, añade la clase 'visible' (con JS o un hook).
+*/
+
+@media (max-width: 900px) {
+  .section-animate {
+    transform: translateY(40px) scale(0.98);
+  }
+}

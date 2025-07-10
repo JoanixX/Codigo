@@ -1,0 +1,107 @@
+/* Cyberpunk futuristic enhancements for sections */
+
+/* Neon glow text */
+.neon-text {
+  color: #00fff7;
+  text-shadow:
+    0 0 5px #00fff7,
+    0 0 10px #00fff7,
+    0 0 20px #00fff7,
+    0 0 40px #00fff7,
+    0 0 80px #00fff7;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+}
+
+/* Flicker animation for neon text */
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 22%, 24%, 55% {
+    opacity: 0.4;
+  }
+}
+
+.flicker {
+  animation: flicker 3s infinite;
+}
+
+/* Glow pulse animation */
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 5px #00fff7,
+      0 0 10px #00fff7,
+      0 0 20px #00fff7,
+      0 0 40px #00fff7,
+      0 0 80px #00fff7;
+  }
+  50% {
+    text-shadow:
+      0 0 10px #00fff7,
+      0 0 20px #00fff7,
+      0 0 30px #00fff7,
+      0 0 50px #00fff7,
+      0 0 100px #00fff7;
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 4s infinite;
+}
+
+/* Futuristic image glow */
+.futuristic-img {
+  border-radius: 24px;
+  box-shadow:
+    0 0 20px #00fff7cc,
+    0 0 40px #00fff7aa,
+    0 0 60px #00fff7aa,
+    0 0 80px #00fff7cc;
+  transition: box-shadow 0.3s ease;
+}
+
+.futuristic-img:hover {
+  box-shadow:
+    0 0 40px #00fff7ff,
+    0 0 80px #00fff7ff,
+    0 0 120px #00fff7ff,
+    0 0 160px #00fff7ff;
+}
+
+/* Section background glow */
+.section-glow {
+  position: relative;
+  z-index: 1;
+}
+
+.section-glow::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: radial-gradient(circle at center, #00fff7aa, transparent 70%);
+  filter: blur(40px);
+  z-index: -1;
+  border-radius: 32px;
+  animation: glowPulse 6s infinite;
+}
+
+/* Cyberpunk button enhancements */
+.btn-cyberpunk {
+  background: linear-gradient(90deg, #00fff7, #6c63ff);
+  color: #181a2a;
+  border: none;
+  box-shadow: 0 0 16px #00fff7cc;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-cyberpunk:hover {
+  background: linear-gradient(90deg, #6c63ff, #00fff7);
+  box-shadow: 0 0 32px #00fff7ff;
+}
