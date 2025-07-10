@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/desksetuppro-db
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+    networks:
+      - desksetup-network
+
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=desksetuppro-db
+    volumes:
+      - mongo_data:/data/db
+      - ./mongobackup.archive:/docker-entrypoint-initdb.d/mongobackup.archive
+    networks:
+      - desksetup-network
+
+volumes:
+  mongo_data:
+
+networks:
+  desksetup-network:
+    driver: bridge 
