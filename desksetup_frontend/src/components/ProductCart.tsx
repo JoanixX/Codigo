@@ -5,9 +5,9 @@ import styles from './ProductCart.module.css';
 interface CartItem {
   producto_id: string;
   nombre: string;
-  precio: number;
+  precio_unitario: number;
   cantidad: number;
-  imagen: string;
+  imagen_url: string;
 }
 
 const ProductCart: React.FC = () => {
@@ -54,7 +54,7 @@ const ProductCart: React.FC = () => {
   };
 
   const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+    return cartItems.reduce((total, item) => total + (item.precio_unitario * item.cantidad), 0);
   };
 
   const handlePurchase = async () => {
@@ -141,12 +141,12 @@ const ProductCart: React.FC = () => {
         {cartItems.map((item) => (
           <div key={item.producto_id} className={styles.cartItem}>
             <div className={styles.itemImage}>
-              <img src={item.imagen} alt={item.nombre} />
+              <img src={item.imagen_url} alt={item.nombre} />
             </div>
             
             <div className={styles.itemInfo}>
               <h3 className={styles.itemName}>{item.nombre}</h3>
-              <p className={styles.itemPrice}>${item.precio.toFixed(2)}</p>
+              <p className={styles.itemPrice}>${item.precio_unitario.toFixed(2)}</p>
             </div>
             
             <div className={styles.itemQuantity}>
@@ -168,7 +168,7 @@ const ProductCart: React.FC = () => {
             </div>
             
             <div className={styles.itemTotal}>
-              ${(item.precio * item.cantidad).toFixed(2)}
+              ${(item.precio_unitario * item.cantidad).toFixed(2)}
             </div>
             
             <button

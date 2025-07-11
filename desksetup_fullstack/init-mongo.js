@@ -21,81 +21,97 @@ db.productos.insertMany([
     _id: "1",
     nombre: "Teclado Mecánico RGB",
     descripcion: "Teclado mecánico con switches Cherry MX Red y retroiluminación RGB personalizable",
-    precio: 89.99,
-    categoria: "Teclados",
-    imagen: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 89.99,
+    marca: "Razer",
+    imagen_url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "1",
     stock: 15,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   },
   {
     _id: "2",
     nombre: "Mouse Gaming Inalámbrico",
     descripcion: "Mouse gaming de alta precisión con sensor óptico de 25,600 DPI",
-    precio: 59.99,
-    categoria: "Mouses",
-    imagen: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 59.99,
+    marca: "Logitech",
+    imagen_url: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "2",
     stock: 20,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   },
   {
     _id: "3",
     nombre: "Monitor Gaming 240Hz",
     descripcion: "Monitor gaming de 27 pulgadas con resolución 1080p y 240Hz de frecuencia de actualización",
-    precio: 299.99,
-    categoria: "Monitores",
-    imagen: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 299.99,
+    marca: "ASUS",
+    imagen_url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "3",
     stock: 8,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   },
   {
     _id: "4",
     nombre: "Auriculares Gaming 7.1",
     descripcion: "Auriculares gaming con sonido surround 7.1 y micrófono con cancelación de ruido",
-    precio: 79.99,
-    categoria: "Auriculares",
-    imagen: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 79.99,
+    marca: "HyperX",
+    imagen_url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "4",
     stock: 12,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   },
   {
     _id: "5",
     nombre: "Alfombrilla Gaming XL",
     descripcion: "Alfombrilla gaming extra grande con superficie de tela de alta calidad",
-    precio: 24.99,
-    categoria: "Alfombrillas",
-    imagen: "https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 24.99,
+    marca: "SteelSeries",
+    imagen_url: "https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "5",
     stock: 25,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   },
   {
     _id: "6",
     nombre: "Teclado TKL RGB",
     descripcion: "Teclado tenkeyless con switches mecánicos y retroiluminación RGB",
-    precio: 69.99,
-    categoria: "Teclados",
-    imagen: "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 69.99,
+    marca: "Corsair",
+    imagen_url: "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "1",
     stock: 10,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   },
   {
     _id: "7",
     nombre: "Mouse Ergonómico",
     descripcion: "Mouse ergonómico diseñado para largas sesiones de gaming",
-    precio: 44.99,
-    categoria: "Mouses",
-    imagen: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 44.99,
+    marca: "Microsoft",
+    imagen_url: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "2",
     stock: 18,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   },
   {
     _id: "8",
     nombre: "Monitor 4K Gaming",
     descripcion: "Monitor gaming de 32 pulgadas con resolución 4K y 144Hz",
-    precio: 499.99,
-    categoria: "Monitores",
-    imagen: "https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=400&q=80",
+    precio_unitario: 499.99,
+    marca: "LG",
+    imagen_url: "https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=400&q=80",
+    categoria_id: "3",
     stock: 5,
-    fecha_creacion: new Date()
+    fecha_creacion: new Date(),
+    activo: true
   }
 ]);
 
@@ -148,42 +164,46 @@ db.clientes.insertMany([
   }
 ]);
 
-// Insertar reseñas
+// Insertar reseñas con likes
 db.reseñas.insertMany([
   {
     _id: "1",
     producto_id: "1",
     cliente_id: "2",
-    calificacion: 5,
+    puntuacion: 5,
     comentario: "Excelente teclado, los switches son muy suaves y el RGB se ve increíble.",
-    fecha_creacion: new Date(),
+    fecha_resena: new Date(),
+    likes: 3,
     respuestas: []
   },
   {
     _id: "2",
     producto_id: "2",
     cliente_id: "3",
-    calificacion: 4,
+    puntuacion: 4,
     comentario: "Muy buen mouse, la precisión es excelente para gaming.",
-    fecha_creacion: new Date(),
+    fecha_resena: new Date(),
+    likes: 1,
     respuestas: []
   },
   {
     _id: "3",
     producto_id: "3",
     cliente_id: "2",
-    calificacion: 5,
+    puntuacion: 5,
     comentario: "Monitor increíble, los 240Hz se notan mucho en los juegos.",
-    fecha_creacion: new Date(),
+    fecha_resena: new Date(),
+    likes: 5,
     respuestas: []
   },
   {
     _id: "4",
     producto_id: "1",
     cliente_id: "3",
-    calificacion: 4,
+    puntuacion: 4,
     comentario: "Buen teclado, aunque un poco ruidoso para uso en oficina.",
-    fecha_creacion: new Date(),
+    fecha_resena: new Date(),
+    likes: 2,
     respuestas: []
   }
 ]);

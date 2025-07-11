@@ -6,7 +6,7 @@ const router = express.Router();
 // Obtener todos los productos
 router.get('/', async (req, res) => {
   try {
-    const productos = await Producto.find();
+    const productos = await Producto.find({ activo: true });
     res.json(productos);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener productos' });
@@ -29,9 +29,9 @@ router.get('/:id', async (req, res) => {
 // Crear nuevo producto
 router.post('/', async (req, res) => {
   try {
-    const { nombre, descripcion, precio, categoria, imagen, stock } = req.body;
+    const { nombre, descripcion, precio_unitario, marca, imagen_url, categoria_id, stock } = req.body;
 
-    if (!nombre || !descripcion || !precio || !categoria || !imagen) {
+    if (!nombre || !descripcion || !precio_unitario || !marca || !imagen_url || !categoria_id) {
       return res.status(400).json({ error: 'Todos los campos son requeridos' });
     }
 
@@ -39,10 +39,12 @@ router.post('/', async (req, res) => {
       _id: Date.now().toString(),
       nombre,
       descripcion,
-      precio: Number(precio),
-      categoria,
-      imagen,
-      stock: Number(stock) || 10
+      precio_unitario: Number(precio_unitario),
+      marca,
+      imagen_url,
+      categoria_id,
+      stock: Number(stock) || 10,
+      activo: true
     });
 
     await nuevoProducto.save();
@@ -60,14 +62,16 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
 
-    const { nombre, descripcion, precio, categoria, imagen, stock } = req.body;
+    const { nombre, descripcion, precio_unitario, marca, imagen_url, categoria_id, stock, activo } = req.body;
 
     if (nombre) producto.nombre = nombre;
     if (descripcion) producto.descripcion = descripcion;
-    if (precio !== undefined) producto.precio = Number(precio);
-    if (categoria) producto.categoria = categoria;
-    if (imagen) producto.imagen = imagen;
+    if (precio_unitario !== undefined) producto.precio_unitario = Number(precio_unitario);
+    if (marca) producto.marca = marca;
+    if (imagen_url) producto.imagen_url = imagen_url;
+    if (categoria_id) producto.categoria_id = categoria_id;
     if (stock !== undefined) producto.stock = Number(stock);
+    if (activo !== undefined) producto.activo = activo;
 
     await producto.save();
     res.json(producto);
@@ -120,7 +124,7 @@ router.post('/comprar', async (req, res) => {
         });
       }
 
-      totalCompra += producto.precio * item.cantidad;
+      totalCompra += producto.precio_unitario * item.cantidad;
       productosActualizados.push({ producto, cantidad: item.cantidad });
     }
 
@@ -164,7 +168,7 @@ router.post('/comprar', async (req, res) => {
       productosComprados: productosActualizados.map(({ producto, cantidad }) => ({
         nombre: producto.nombre,
         cantidad,
-        precio: producto.precio
+        precio: producto.precio_unitario
       }))
     });
 

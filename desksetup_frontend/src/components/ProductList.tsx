@@ -54,14 +54,27 @@ const ProductList: React.FC = () => {
 
   const handleAddToCart = (product: Product) => {
     try {
-      const cart = JSON.parse(localStorage.getItem('product_cart') || '[]');
-      if (!cart.includes(product._id)) {
-        cart.push(product._id);
-        localStorage.setItem('product_cart', JSON.stringify(cart));
-        alert('Producto agregado al carrito');
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      
+      // Verificar si el producto ya está en el carrito
+      const existingItem = cart.find((item: any) => item.producto_id === product._id);
+      
+      if (existingItem) {
+        // Si ya existe, incrementar cantidad
+        existingItem.cantidad += 1;
       } else {
-        alert('Producto ya está en el carrito');
+        // Si no existe, agregar nuevo item
+        cart.push({
+          producto_id: product._id,
+          nombre: product.nombre,
+          precio_unitario: product.precio_unitario,
+          cantidad: 1,
+          imagen_url: product.imagen_url
+        });
       }
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Producto agregado al carrito');
     } catch (error) {
       console.error('Error adding to cart:', error);
       alert('Error al agregar al carrito');
