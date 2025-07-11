@@ -152,9 +152,11 @@ const ReviewList: React.FC = () => {
                 </div>
                 <div className={styles.userDetails}>
                   <span className={styles.userName}>
-                    {review.cliente?.nombre && review.cliente?.apellido
-                      ? `${review.cliente.nombre} ${review.cliente.apellido}`
-                      : `Usuario #${review.cliente_id.slice(-6)}`
+                    {review.cliente?.usuario
+                      ? review.cliente.usuario
+                      : (review.cliente?.nombre && review.cliente?.apellido
+                        ? `${review.cliente.nombre} ${review.cliente.apellido}`
+                        : `Usuario #${review.cliente_id.slice(-6)}`)
                     }
                   </span>
                   <span className={styles.reviewDate}>

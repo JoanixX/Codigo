@@ -123,37 +123,35 @@ const ProductCart: React.FC = () => {
 
   return (
     <div className={styles.cartContainer}>
-      <h2 className={styles.cartTitle}>Mi Carrito</h2>
-      
+      <div className={styles.header}>
+        <h2 className={styles.cartTitle}>Mi Carrito</h2>
+      </div>
       {error && (
         <div className={styles.errorMessage}>
           {error}
         </div>
       )}
-
       {success && (
         <div className={styles.successMessage}>
           {success}
         </div>
       )}
-
       <div className={styles.cartItems}>
         {cartItems.map((item) => (
           <div key={item.producto_id} className={styles.cartItem}>
             <div className={styles.itemImage}>
               <img src={item.imagen_url} alt={item.nombre} />
             </div>
-            
             <div className={styles.itemInfo}>
               <h3 className={styles.itemName}>{item.nombre}</h3>
               <p className={styles.itemPrice}>${item.precio_unitario.toFixed(2)}</p>
             </div>
-            
             <div className={styles.itemQuantity}>
               <button
                 onClick={() => updateQuantity(item.producto_id, item.cantidad - 1)}
                 className={styles.quantityButton}
                 disabled={isLoading}
+                aria-label="Disminuir cantidad"
               >
                 -
               </button>
@@ -162,26 +160,25 @@ const ProductCart: React.FC = () => {
                 onClick={() => updateQuantity(item.producto_id, item.cantidad + 1)}
                 className={styles.quantityButton}
                 disabled={isLoading}
+                aria-label="Aumentar cantidad"
               >
                 +
               </button>
             </div>
-            
             <div className={styles.itemTotal}>
               ${(item.precio_unitario * item.cantidad).toFixed(2)}
             </div>
-            
             <button
               onClick={() => removeFromCart(item.producto_id)}
               className={styles.removeButton}
               disabled={isLoading}
+              aria-label="Eliminar producto"
             >
-              🗑️
+              Eliminar
             </button>
           </div>
         ))}
       </div>
-
       <div className={styles.cartSummary}>
         <div className={styles.summaryRow}>
           <span>Total de productos:</span>
@@ -191,7 +188,6 @@ const ProductCart: React.FC = () => {
           <span>Total a pagar:</span>
           <span className={styles.totalPrice}>${getTotalPrice().toFixed(2)}</span>
         </div>
-        
         <div className={styles.cartActions}>
           <button
             onClick={clearCart}
